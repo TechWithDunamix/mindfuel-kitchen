@@ -11,8 +11,9 @@ export default function Nav() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-warm-200/50">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 md:px-10">
-        <Link to="/" className="flex items-center gap-2">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3 md:px-10">
+        <Link to="/" className="flex items-center gap-3">
+          <img src="/logo.png" alt="Mindfuel Kitchen" className="h-10 w-auto" />
           <span className="font-display text-2xl tracking-wide text-warm-900">
             Mindfuel <span className="text-fire-600">Kitchen</span>
           </span>

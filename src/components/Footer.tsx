@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { CupSoda, MapPin, Phone, Mail, Clock } from 'lucide-react'
+import { MapPin, Phone, Mail } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -7,8 +7,8 @@ export default function Footer() {
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-wrap justify-between gap-12">
           <div className="max-w-xs">
-            <Link to="/" className="flex items-center gap-2">
-              <CupSoda size={20} className="text-fire-600" />
+            <Link to="/" className="flex items-center gap-3">
+              <img src="/logo.png" alt="Mindfuel Kitchen" className="h-9 w-auto" />
               <span className="font-display text-xl tracking-wide">Mindfuel <span className="text-fire-600">Kitchen</span></span>
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-warm-800/50">
