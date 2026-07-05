@@ -50,7 +50,7 @@ export default function Menu() {
           </p>
         </div>
 
-        {categories.map((cat, ci) => (
+        {categories.map((cat) => (
           <div key={cat.name} className="mb-16 last:mb-0">
             <h2 className="font-display mb-8 text-2xl tracking-wide md:text-3xl">{cat.name}</h2>
             <div className="grid gap-6 md:grid-cols-3">
