@@ -7,12 +7,22 @@ export default function Landing() {
   const { products, loading, error } = useProducts()
   const featured = products.slice(0, 8)
 
+  const heroProduct = products[0]
+  const splitA = products[1]
+  const splitB = products[2]
+  const craftProduct = products[3]
+
   return (
     <>
+      {/* ─────────────── HERO ─────────────── */}
       <section className="relative flex items-end overflow-hidden" style={{ height: '70vh', minHeight: 420 }}>
         <div className="absolute inset-0">
-          <img src="/images/hero-bg.jpg" alt="" className="h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-bg/80 via-bg/50 to-transparent" />
+          {heroProduct?.image ? (
+            <img src={heroProduct.image} alt="" className="h-full w-full object-cover" />
+          ) : (
+            <div className="h-full w-full bg-elevated" />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-r from-bg/85 via-bg/50 to-transparent" />
         </div>
         <div className="relative z-10 w-full px-6 pb-14 md:px-12 md:pb-20">
           <div className="mx-auto max-w-6xl">
@@ -29,6 +39,7 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ─────────────── FEATURED DRINKS ─────────────── */}
       <section className="px-6 py-14 md:px-12 md:py-20">
         <div className="mx-auto max-w-6xl">
           <motion.p
@@ -95,79 +106,73 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="px-6 py-20 md:px-12 md:py-28">
-        <div className="mx-auto max-w-6xl">
-          <div className="text-center">
-            <span className="text-xs font-semibold uppercase tracking-widest text-primary">Pure Ingredients</span>
-            <h2 className="font-display mt-4 text-5xl leading-[0.9] tracking-[-1px] md:text-7xl lg:text-8xl">
-              100% Natural
-              <br />
-              <span className="text-primary">Ingredients</span>
-            </h2>
-            <p className="mx-auto mt-6 max-w-lg text-sm leading-relaxed text-muted">
-              No artificial flavors. No preservatives. No shortcuts. Every drink is made with
-              real, recognizable ingredients — sourced with care, blended with purpose.
-            </p>
+      {/* ─────────────── SPLIT — PRODUCT A ─────────────── */}
+      {splitA && (
+        <section className="flex flex-col md:flex-row">
+          <div className="h-72 overflow-hidden md:h-auto md:w-1/2">
+            <img src={splitA.image} alt={splitA.name} className="h-full w-full object-cover" />
           </div>
-          <div className="mt-12 flex flex-col gap-6 md:flex-row">
-            <div className="flex-1 overflow-hidden rounded-3xl">
-              <img src="/images/smoothie.jpg" alt="Natural ingredients" className="h-full w-full object-cover" style={{ maxHeight: 480, minHeight: 320 }} />
-            </div>
-            <div className="flex-1 overflow-hidden rounded-3xl">
-              <img src="/images/citrus.jpg" alt="Fresh citrus" className="h-full w-full object-cover" style={{ maxHeight: 480, minHeight: 320 }} />
+          <div className="flex items-center px-6 py-16 md:w-1/2 md:px-14 md:py-24">
+            <div className="max-w-md">
+              <span className="text-xs font-semibold uppercase tracking-widest text-primary">
+                {splitA.category}
+              </span>
+              <h2 className="font-display mt-3 text-4xl leading-[0.9] tracking-[-1px] md:text-5xl">
+                {splitA.name}
+              </h2>
+              <p className="mt-4 text-sm leading-relaxed text-muted">
+                {splitA.description}
+              </p>
+              <div className="mt-5 flex items-center gap-3 text-sm font-semibold">
+                <span className="text-primary">{formatPrice(splitA.price, splitA.currency)}</span>
+                <span className="text-muted">|</span>
+                <span className="flex items-center gap-1 text-primary">
+                  <Star size={14} className="fill-primary" />
+                  Real product, real ingredients
+                </span>
+              </div>
+              <Link to="/menu" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary-hover">
+                Order Now <ArrowRight size={14} />
+              </Link>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      <section className="flex flex-col md:flex-row">
-        <div className="h-72 overflow-hidden md:h-auto md:w-1/2">
-          <img src="/images/matcha.jpg" alt="Matcha drink" className="h-full w-full object-cover" />
-        </div>
-        <div className="flex items-center px-6 py-16 md:w-1/2 md:px-14 md:py-24">
-          <div className="max-w-md">
-            <span className="text-xs font-semibold uppercase tracking-widest text-primary">Signature Blend</span>
-            <h2 className="font-display mt-3 text-4xl leading-[0.9] tracking-[-1px] md:text-5xl">Focus Elixir</h2>
-            <p className="mt-4 text-sm leading-relaxed text-muted">
-              Our bestseller. Matcha, Lion's Mane mushroom, and L-Theanine work together to deliver
-              sharp, calm focus without the jitters or crash. Perfect for deep work, study sessions,
-              or mornings when you need to be at your best.
-            </p>
-            <div className="mt-5 flex items-center gap-1.5 text-sm font-semibold text-primary">
-              <Star size={14} className="fill-primary text-primary" />
-              Boosts concentration by 40%
-            </div>
-            <Link to="/menu" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary-hover">
-              Order Now <ArrowRight size={14} />
-            </Link>
+      {/* ─────────────── SPLIT — PRODUCT B ─────────────── */}
+      {splitB && (
+        <section className="flex flex-col md:flex-row-reverse">
+          <div className="h-72 overflow-hidden md:h-auto md:w-1/2">
+            <img src={splitB.image} alt={splitB.name} className="h-full w-full object-cover" />
           </div>
-        </div>
-      </section>
-
-      <section className="flex flex-col md:flex-row-reverse">
-        <div className="h-72 overflow-hidden md:h-auto md:w-1/2">
-          <img src="/images/turmeric.jpg" alt="Turmeric drink" className="h-full w-full object-cover" />
-        </div>
-        <div className="flex items-center px-6 py-16 md:w-1/2 md:px-14 md:py-24">
-          <div className="max-w-md">
-            <span className="text-xs font-semibold uppercase tracking-widest text-primary">Wellness Blend</span>
-            <h2 className="font-display mt-3 text-4xl leading-[0.9] tracking-[-1px] md:text-5xl">Bloom</h2>
-            <p className="mt-4 text-sm leading-relaxed text-muted">
-              Turmeric, ginger, probiotics, and a touch of black pepper for absorption. Bloom is
-              our anti-inflammatory powerhouse — supporting gut health, immunity, and glowing skin
-              with every sip. Warm or iced, it's a daily ritual worth keeping.
-            </p>
-            <div className="mt-5 flex items-center gap-1.5 text-sm font-semibold text-primary">
-              <Star size={14} className="fill-primary text-primary" />
-              Reduces inflammation markers
+          <div className="flex items-center px-6 py-16 md:w-1/2 md:px-14 md:py-24">
+            <div className="max-w-md">
+              <span className="text-xs font-semibold uppercase tracking-widest text-primary">
+                {splitB.category}
+              </span>
+              <h2 className="font-display mt-3 text-4xl leading-[0.9] tracking-[-1px] md:text-5xl">
+                {splitB.name}
+              </h2>
+              <p className="mt-4 text-sm leading-relaxed text-muted">
+                {splitB.description}
+              </p>
+              <div className="mt-5 flex items-center gap-3 text-sm font-semibold">
+                <span className="text-primary">{formatPrice(splitB.price, splitB.currency)}</span>
+                <span className="text-muted">|</span>
+                <span className="flex items-center gap-1 text-primary">
+                  <Star size={14} className="fill-primary" />
+                  Real product, real ingredients
+                </span>
+              </div>
+              <Link to="/menu" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary-hover">
+                Order Now <ArrowRight size={14} />
+              </Link>
             </div>
-            <Link to="/menu" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary-hover">
-              Order Now <ArrowRight size={14} />
-            </Link>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
+      {/* ─────────────── CRAFTED WITH PURPOSE ─────────────── */}
       <section className="relative overflow-hidden bg-primary/10 px-6 py-20 md:py-32 md:px-12">
         <div className="mx-auto flex max-w-6xl flex-col items-center md:flex-row">
           <div className="relative z-10 -mb-16 rounded-3xl bg-elevated p-8 text-text md:-mr-20 md:mb-0 md:p-12" style={{ maxWidth: 400 }}>
@@ -185,19 +190,24 @@ export default function Landing() {
           </div>
           <div className="relative shrink-0 md:w-[600px] lg:w-[700px]">
             <div className="overflow-hidden rounded-3xl shadow-2xl" style={{ height: 'min(70vw, 520px)' }}>
-              <img src="/images/coffee.jpg" alt="MindFuel Kitchen" className="h-full w-full object-cover" />
+              {craftProduct?.image ? (
+                <img src={craftProduct.image} alt="Featured product" className="h-full w-full object-cover" />
+              ) : (
+                <div className="h-full w-full bg-surface" />
+              )}
             </div>
           </div>
         </div>
       </section>
 
+      {/* ─────────────── CTA ─────────────── */}
       <section className="px-6 py-24 md:py-28 md:px-12">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="font-display text-4xl leading-[0.9] tracking-[-1px] md:text-6xl">
             Ready to <span className="text-primary">Fuel Up?</span>
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-muted">
-            Come visit our cafe or browse the full menu. Your mind will thank you.
+            Browse our full menu of functional drinks — every product is real, every ingredient matters.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link to="/menu" className="group inline-flex items-center gap-2 rounded-full bg-primary px-8 py-3.5 text-sm font-bold uppercase tracking-wider text-white transition-all duration-300 hover:bg-primary-hover">
