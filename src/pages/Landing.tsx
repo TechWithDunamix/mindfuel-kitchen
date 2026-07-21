@@ -1,29 +1,112 @@
 import { Link } from '@tanstack/react-router'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, Star } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useProducts, formatPrice } from '../lib/api'
 
 export default function Landing() {
   const { products, loading, error } = useProducts()
   const featured = products.slice(0, 8)
 
-  const heroProduct = products[0]
   const splitA = products[1]
   const splitB = products[2]
   const craftProduct = products[3]
+
+  /* ────── Hero slideshow ────── */
+  const slides = products.slice(0, 6)
+  const [current, setCurrent] = useState(0)
+  const [dir, setDir] = useState(1)
+
+  useEffect(() => {
+    if (slides.length < 2) return
+    const id = setInterval(() => {
+      setDir(1)
+      setCurrent((c) => (c + 1) % slides.length)
+    }, 5000)
+    return () => clearInterval(id)
+  }, [slides.length])
+
+  const slide = slides[current]
+
+  function goTo(i: number) {
+    setDir(i > current ? 1 : -1)
+    setCurrent(i)
+  }
 
   return (
     <>
       {/* ─────────────── HERO ─────────────── */}
       <section className="relative flex items-end overflow-hidden" style={{ height: '70vh', minHeight: 420 }}>
         <div className="absolute inset-0">
-          {heroProduct?.image ? (
-            <img src={heroProduct.image} alt="" className="h-full w-full object-cover" />
-          ) : (
-            <div className="h-full w-full bg-elevated" />
+          <AnimatePresence mode="wait" custom={dir}>
+            {slide?.image ? (
+              <motion.img
+                key={slide.id}
+                src={slide.image}
+                alt=""
+                custom={dir}
+                initial={{ opacity: 0, scale: 1.08 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.8, ease: 'easeInOut' }}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="h-full w-full bg-elevated" />
+            )}
+          </AnimatePresence>
+          <div className="absolute inset-0 bg-gradient-to-r from-bg/85 via-bg/60 to-transparent" />
+
+          {/* ── slide caption ── */}
+          {slide && (
+            <div className="absolute bottom-14 left-6 z-20 md:bottom-20 md:left-12">
+              <motion.p
+                key={`label-${slide.id}`}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-xs font-semibold uppercase tracking-widest text-primary"
+              >
+                {slide.category}
+              </motion.p>
+              <motion.h2
+                key={`name-${slide.id}`}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="font-display mt-1 text-3xl leading-[0.9] tracking-[-1px] text-text md:text-5xl"
+              >
+                {slide.name}
+              </motion.h2>
+              <motion.p
+                key={`price-${slide.id}`}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="mt-2 text-lg font-semibold text-primary"
+              >
+                {formatPrice(slide.price, slide.currency)}
+              </motion.p>
+            </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-r from-bg/85 via-bg/50 to-transparent" />
         </div>
+
+        {/* ── dots ── */}
+        {slides.length > 1 && (
+          <div className="absolute bottom-5 left-6 z-20 flex gap-2 md:left-12">
+            {slides.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => goTo(i)}
+                aria-label={`Slide ${i + 1}`}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  i === current ? 'w-8 bg-primary' : 'w-3 bg-white/30 hover:bg-white/50'
+                }`}
+              />
+            ))}
+          </div>
+        )}
+
         <div className="relative z-10 w-full px-6 pb-14 md:px-12 md:pb-20">
           <div className="mx-auto max-w-6xl">
             <motion.h1
